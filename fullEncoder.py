@@ -4,6 +4,7 @@
 # you can configure a callback which will be called whenever the value changes.
 
 import RPi.GPIO as GPIO
+from timeit import default_timer as timer
 
 class FullEncoder:
 
@@ -39,31 +40,35 @@ class FullEncoder:
         GPIO.add_event_detect(self.rBtn, GPIO.FALLING, callback=self.btnPress)
         GPIO.add_event_detect(self.uBtn, GPIO.FALLING, callback=self.btnPress)
         GPIO.add_event_detect(self.lBtn, GPIO.FALLING, callback=self.btnPress)
+        # Value for preventing double input presses
+        self.last_button_time = 0
+        # value for setting how much delay on button presses - in milliseconds
+        self.delay_time = 0.100
 
 
     #Code added to detect a button press
     def btnPress(self, channel):
-        btnPressed = "unknown"
-        cPin = GPIO.input(self.cBtn)
-        dPin = GPIO.input(self.dBtn)
-        rPin = GPIO.input(self.rBtn)
-        uPin = GPIO.input(self.uBtn)
-        lPin = GPIO.input(self.lBtn)
+        current_press = tuner()
+        if ((current_press - self.last_button_time) > self.delay_time):
+            btnPressed = "unknown"
+            cPin = GPIO.input(self.cBtn)
+            dPin = GPIO.input(self.dBtn)
+            rPin = GPIO.input(self.rBtn)
+            uPin = GPIO.input(self.uBtn)
+            lPin = GPIO.input(self.lBtn)
 
-        if cPin == GPIO.LOW:
-            btnPressed = "center"
-        elif dPin == GPIO.LOW:
-            btnPressed = "down"
-        elif rPin == GPIO.LOW:
-            btnPressed = "right"
-        elif uPin == GPIO.LOW:
-            btnPressed = "up"
-        elif lPin == GPIO.LOW:
-            btnPressed = "left"
-
-
-
-        self.btnCallback(btnPressed)
+            if cPin == GPIO.LOW:
+                btnPressed = "center"
+            elif dPin == GPIO.LOW:
+                btnPressed = "down"
+            elif rPin == GPIO.LOW:
+                btnPressed = "right"
+            elif uPin == GPIO.LOW:
+                btnPressed = "up"
+            elif lPin == GPIO.LOW:
+                btnPressed = "left"
+            self.last_button_time = current_press
+            self.btnCallback(btnPressed)
 
     def transitionOccurred(self, channel):
         p1 = GPIO.input(self.leftPin)
