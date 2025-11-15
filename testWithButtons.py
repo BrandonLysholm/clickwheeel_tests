@@ -17,7 +17,9 @@ e1 = FullEncoder(32, 33, 10, 11, 7, 15, 16, btnChange, valueChanged)
 
 try:
     while True:
-        print("Value is {}".format(e1.getValue()))
+        # print("Value is {}".format(e1.getValue()))
+        time.sleep(1)
+        print("waiting for response")
 except Exception:
     pass
 
