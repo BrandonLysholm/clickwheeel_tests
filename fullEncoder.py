@@ -48,7 +48,7 @@ class FullEncoder:
 
     #Code added to detect a button press
     def btnPress(self, channel):
-        current_press = tuner()
+        current_press = timer()
         if ((current_press - self.last_button_time) > self.delay_time):
             btnPressed = "unknown"
             cPin = GPIO.input(self.cBtn)
