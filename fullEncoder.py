@@ -43,7 +43,7 @@ class FullEncoder:
         # Value for preventing double input presses
         self.last_button_time = 0
         # value for setting how much delay on button presses - in milliseconds
-        self.delay_time = 0.200
+        self.delay_time = 0.250
 
 
     #Code added to detect a button press
